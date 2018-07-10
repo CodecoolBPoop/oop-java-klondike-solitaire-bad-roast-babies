@@ -40,8 +40,10 @@ public class Pile extends Pane {
     }
 
     public int numOfCards() {
-        //TODO Ezzel megvizsgálhatnád hogy hány darab felforgatott kártya van a pile-ban
-        // Akárt a "GameWin" methodusban is meghivhatjuk.
+        int numberOfCards = cards.size();
+//        String pileName = getName(); //How to print out the name of the pile?
+        System.out.println("There is " + numberOfCards + " cards in ? pile.");
+        return numberOfCards;
     }
 
     public boolean isEmpty() {
