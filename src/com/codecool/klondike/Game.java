@@ -77,18 +77,18 @@ public class Game extends Pane {
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);
-        //TODO
+        Pile pile = getValidIntersectingPile(card, tableauPiles);  // Ebben a methodusban már meghivtuk az isMOveValid methodust
+        //TODO check cards color and number.
         if (pile != null) {
             handleValidMove(card, pile);
         } else {
-            draggedCards.forEach(MouseUtil::slideBack);
+            draggedCards.forEach(MouseUtil::slideBack); // Ez egy lista ami minden egyes mozgatott kártyát tartalmaz.
             draggedCards = null;
         }
     };
 
     public boolean isGameWon() {
-        //TODO
+        //TODO win win
         return false;
     }
 
@@ -106,12 +106,12 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
+        //TODO Discardbol visszarakni a kártyákat a stock-ba
         System.out.println("Stock refilled from discard pile.");
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        //TODO
+        //TODO Ellenörizd a kártya jó helyen van e.
         return true;
     }
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
@@ -182,7 +182,7 @@ public class Game extends Pane {
 
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
+        //TODO Itt jön létre a deck. De a suffle-t egy másik kulön fugvényben csináljuk meg.
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
             addMouseEventHandlers(card);

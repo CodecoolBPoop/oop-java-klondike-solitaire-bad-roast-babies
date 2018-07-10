@@ -78,11 +78,11 @@ public class Card extends ImageView {
     }
 
     public static boolean isOppositeColor(Card card1, Card card2) {
-        //TODO
+        //TODO szinek ellenörzése. Ezt hivjuk meg az isMOveValid methodsban(Game class)
         return true;
     }
 
-    public static boolean isSameSuit(Card card1, Card card2) {
+    public static boolean isSameSuit(Card card1, Card card2) { // a fundation vizsgálatánál kell használni.
         return card1.getSuit() == card2.getSuit();
     }
 

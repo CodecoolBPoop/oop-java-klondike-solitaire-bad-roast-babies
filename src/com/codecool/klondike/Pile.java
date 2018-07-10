@@ -14,7 +14,7 @@ import java.util.ListIterator;
 public class Pile extends Pane {
 
     private PileType pileType;
-    private String name;
+    private String name; // Fasznak sem kell. ... törölhető
     private double cardGap;
     private ObservableList<Card> cards = FXCollections.observableArrayList();
 
@@ -40,7 +40,8 @@ public class Pile extends Pane {
     }
 
     public int numOfCards() {
-        //TODO
+        //TODO Ezzel megvizsgálhatnád hogy hány darab felforgatott kártya van a pile-ban
+        // Akárt a "GameWin" methodusban is meghivhatjuk.
         return 1;
     }
 
@@ -49,7 +50,7 @@ public class Pile extends Pane {
     }
 
     public void clear() {
-        //TODO
+        //TODO  Meghivható amikor a diskardbol akarjuk a kártyákat visszarakni a sktackbe
     }
 
     public void addCard(Card card) {

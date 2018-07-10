@@ -20,9 +20,9 @@ public class Klondike extends Application {
         Game game = new Game();
         game.setTableBackground(new Image("/table/green.png"));
 
-        primaryStage.setTitle("Klondike Solitaire");
+        primaryStage.setTitle("Geci");
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();
     }
-
+//TODO valahol a code direkt hibákat generál. TAláld meg és csináld meg .
 }
