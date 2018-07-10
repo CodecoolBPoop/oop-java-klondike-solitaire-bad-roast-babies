@@ -14,9 +14,9 @@ import java.util.ListIterator;
 public class Pile extends Pane {
 
     private PileType pileType;
-    private String name;
+    private String name; // Fasznak sem kell. ... törölhető
     private double cardGap;
-    private ObservableList<Card> cards = FXCollections.observableArrayList();
+    private ObservableList<Card> cards = FXCollections.observableArrayList(); // TODO ebbe teszi bele a felforgatott kártyát
 
     public Pile(PileType pileType, String name, double cardGap) {
         this.pileType = pileType;
@@ -52,7 +52,8 @@ public class Pile extends Pane {
     }
 
     public void clear() {
-        //TODO
+        //TODO  Meghivható amikor a diskardbol akarjuk a kártyákat visszarakni a sktackbe
+        this.clear();
     }
 
     public void addCard(Card card) {
@@ -91,5 +92,15 @@ public class Pile extends Pane {
         DISCARD,
         FOUNDATION,
         TABLEAU
+    }
+
+    @Override
+    public String toString() {
+        return "Pile{" +
+                "pileType=" + pileType +
+                ", name='" + name + '\'' +
+                ", cardGap=" + cardGap +
+                ", cards=" + cards +
+                '}';
     }
 }
