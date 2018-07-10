@@ -95,7 +95,7 @@ public class Game extends Pane {
     }
 
     public Game() {
-        deck = Card.createNewDeck(); //TODO itt van a deck
+        deck = Card.createNewDeck();
         //System.out.println("deck" + deck.toString());
         initPiles();
         shuffleCards();
