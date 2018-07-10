@@ -14,6 +14,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,6 +41,8 @@ public class Game extends Pane {
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+            stockPile.numOfCards();
+            discardPile.numOfCards(); //Counts the cards in the discord pile.
         }
     };
 
@@ -95,6 +98,7 @@ public class Game extends Pane {
         deck = Card.createNewDeck(); //TODO itt van a deck
         //System.out.println("deck" + deck.toString());
         initPiles();
+        shuffleCards();
         dealCards();
     }
 
@@ -190,8 +194,14 @@ public class Game extends Pane {
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
+        stockPile.numOfCards(); //Counts the cards in the stock pile.
 
     }
+
+    public void shuffleCards() {
+        Collections.shuffle(deck);
+    }
+
 
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
