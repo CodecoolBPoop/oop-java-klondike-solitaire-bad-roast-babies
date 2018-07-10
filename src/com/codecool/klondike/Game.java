@@ -41,6 +41,8 @@ public class Game extends Pane {
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+            stockPile.numOfCards();
+            discardPile.numOfCards(); //Counts the cards in the discord pile.
         }
     };
 
@@ -188,6 +190,7 @@ public class Game extends Pane {
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
+        stockPile.numOfCards(); //Counts the cards in the stock pile.
 
     }
 
