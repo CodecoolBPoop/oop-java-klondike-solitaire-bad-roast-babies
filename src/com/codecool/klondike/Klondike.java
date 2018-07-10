@@ -20,7 +20,7 @@ public class Klondike extends Application {
         Game game = new Game();
         game.setTableBackground(new Image("/table/green.png"));
 
-        primaryStage.setTitle("Geci");
+        primaryStage.setTitle("Klondike");
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();
     }
