@@ -16,7 +16,7 @@ public class Pile extends Pane {
     private PileType pileType;
     private String name; // Fasznak sem kell. ... törölhető
     private double cardGap;
-    private ObservableList<Card> cards = FXCollections.observableArrayList();
+    private ObservableList<Card> cards = FXCollections.observableArrayList(); // TODO ebbe teszi bele a felforgatott kártyát
 
     public Pile(PileType pileType, String name, double cardGap) {
         this.pileType = pileType;
@@ -36,10 +36,13 @@ public class Pile extends Pane {
     }
 
     public ObservableList<Card> getCards() {
+        System.out.println(" get card" + cards.toString());
+        System.out.println(numOfCards());
         return cards;
     }
 
     public int numOfCards() {
+        cards.size();
         //TODO Ezzel megvizsgálhatnád hogy hány darab felforgatott kártya van a pile-ban
         // Akárt a "GameWin" methodusban is meghivhatjuk.
         return 1;
@@ -89,5 +92,15 @@ public class Pile extends Pane {
         DISCARD,
         FOUNDATION,
         TABLEAU
+    }
+
+    @Override
+    public String toString() {
+        return "Pile{" +
+                "pileType=" + pileType +
+                ", name='" + name + '\'' +
+                ", cardGap=" + cardGap +
+                ", cards=" + cards +
+                '}';
     }
 }

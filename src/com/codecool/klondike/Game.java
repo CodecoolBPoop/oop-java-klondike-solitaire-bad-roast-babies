@@ -33,7 +33,6 @@ public class Game extends Pane {
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
 
-
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
@@ -93,7 +92,8 @@ public class Game extends Pane {
     }
 
     public Game() {
-        deck = Card.createNewDeck();
+        deck = Card.createNewDeck(); //TODO itt van a deck
+        //System.out.println("deck" + deck.toString());
         initPiles();
         dealCards();
     }
@@ -106,7 +106,7 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO Discardbol visszarakni a kártyákat a stock-ba
+        //TODO Discardbol visszarakni a kártyákat a stock-ba Itt hivd meg a cleart
         System.out.println("Stock refilled from discard pile.");
     }
 
@@ -197,4 +197,22 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
+    @Override
+    public String toString() {
+        return "Game{" +
+                "deck=" + deck +
+                ", stockPile=" + stockPile +
+                ", discardPile=" + discardPile +
+                ", foundationPiles=" + foundationPiles +
+                ", tableauPiles=" + tableauPiles +
+                ", dragStartX=" + dragStartX +
+                ", dragStartY=" + dragStartY +
+                ", draggedCards=" + draggedCards +
+                ", onMouseClickedHandler=" + onMouseClickedHandler +
+                ", stockReverseCardsHandler=" + stockReverseCardsHandler +
+                ", onMousePressedHandler=" + onMousePressedHandler +
+                ", onMouseDraggedHandler=" + onMouseDraggedHandler +
+                ", onMouseReleasedHandler=" + onMouseReleasedHandler +
+                '}';
+    }
 }
