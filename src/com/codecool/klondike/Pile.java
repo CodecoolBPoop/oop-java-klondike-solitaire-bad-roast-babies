@@ -49,7 +49,6 @@ public class Pile extends Pane {
     }
 
     public void clear() {
-        //TODO  Meghivható amikor a diskardbol akarjuk a kártyákat visszarakni a sktackbe
         this.clear();
     }
 
