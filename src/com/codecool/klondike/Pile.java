@@ -36,16 +36,12 @@ public class Pile extends Pane {
     }
 
     public ObservableList<Card> getCards() {
-        System.out.println(" get card" + cards.toString());
-        System.out.println(numOfCards());
         return cards;
     }
 
     public int numOfCards() {
-        cards.size();
         //TODO Ezzel megvizsgálhatnád hogy hány darab felforgatott kártya van a pile-ban
         // Akárt a "GameWin" methodusban is meghivhatjuk.
-        return 1;
     }
 
     public boolean isEmpty() {
@@ -54,6 +50,7 @@ public class Pile extends Pane {
 
     public void clear() {
         //TODO  Meghivható amikor a diskardbol akarjuk a kártyákat visszarakni a sktackbe
+        this.clear();
     }
 
     public void addCard(Card card) {
