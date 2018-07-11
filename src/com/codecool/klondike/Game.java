@@ -116,13 +116,22 @@ public class Game extends Pane {
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
+//        destPile.getPileType()
 //        if ((Card.isOppositeColor(card,destPile.getTopCard()) == true) && (Card.isDescendingOrder(card,destPile.getTopCard())==true)) {
 //            return true;
 //        }
-        if (Card.isAscendingOrder(card,destPile.getTopCard()) == true) {
-            return true;
+        if (destPile.getTopCard() == null) {
+            if (Card.isAce(card) == true) {
+                return true;
+            }return false;
         }
-        return false;
+        else {
+                if (Card.isAscendingOrder(card,destPile.getTopCard()) == true) {
+                    return true;
+
+            }return false;
+
+        }
 
     }
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
