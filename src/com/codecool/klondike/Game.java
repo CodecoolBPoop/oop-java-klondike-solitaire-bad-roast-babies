@@ -36,6 +36,8 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
+        Pile activePile = card.getContainingPile();
+        Card topCard = activePile.getTopCard();
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
             card.flip();
@@ -44,13 +46,12 @@ public class Game extends Pane {
             stockPile.numOfCards();
             discardPile.numOfCards(); //Counts the cards in the discord pile.
         }
-        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU )  {
-            //tableauPiles.get(i).getTopCard().flip();
+        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU )
 
-            if (card.isFaceDown()) { //todo: get first element only
+            if (card.isFaceDown() &&  (topCard.equals(card)))    { //todo: get first element only
                 card.flip();
             }
-        }
+
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -103,7 +104,7 @@ public class Game extends Pane {
         */
         //draggedCards.clear();
         draggedCards.add(card);
-        System.out.println("egy card" + draggedCards);
+//        System.out.println("egy card" + draggedCards);
 
         card.getDropShadow().setRadius(20);
         card.getDropShadow().setOffsetX(10);
