@@ -3,15 +3,12 @@ package com.codecool.klondike;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -252,6 +249,30 @@ public class Game extends Pane {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+    }
+
+    public HBox addHBox() {
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setSpacing(10);
+        hbox.setStyle("-fx-background-color: #336699;");
+
+        Button buttonNewGame = new Button("New Game");
+        buttonNewGame.setPrefSize(100, 20);
+
+        Button buttonRestartGame = new Button("RestartGame");
+        buttonRestartGame.setPrefSize(100, 20);
+        buttonRestartGame.setOnAction((event) -> {
+//            stockPile.clear();
+//            discardPile.clear();
+            tableauPiles.clear();
+//            foundationPiles.clear();
+            dealCards();
+        });
+
+        hbox.getChildren().addAll(buttonNewGame, buttonRestartGame);
+
+        return hbox;
     }
 
     @Override
