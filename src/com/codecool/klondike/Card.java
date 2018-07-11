@@ -78,8 +78,10 @@ public class Card extends ImageView {
     }
 
     public static boolean isOppositeColor(Card card1, Card card2) {
-        if (card2 == null){
-            return true;
+        if ((card1.getSuit() == 4 || card1.getSuit() == 3) && (card2.getSuit() == 3 || card2.getSuit() == 4)) {
+            return false;
+        } else if ((card1.getSuit() == 1 || card1.getSuit() == 2) && (card2.getSuit() == 1 || card2.getSuit() == 2)) {
+            return false;
         } else {
             if ((card1.getSuit() == 4 || card1.getSuit() == 3) && (card2.getSuit() == 3 || card2.getSuit() == 4)) {
   //              System.out.println("azonos");
@@ -91,22 +93,39 @@ public class Card extends ImageView {
     //            System.out.println("váltott színek");
                 return true;
             }
+            return true;
         }
     }
 
     public static boolean isDescendingOrder(Card card1, Card card2) {
-        if (card2 == null) {
+        if (card1.getRank() == card2.getRank() - 1) {
+            return true;
+        } else return false;
+    }
+  
+    public static boolean isItAKing(Card card) {
+        if (card.getRank() == 13) {
             return true;
         } else {
-            if (card1.getRank() == card2.getRank()-1) {
-                return true;
-            } else return false;
+            return false;
         }
     }
 
+    public static boolean isAce(Card card1) {
+        if (card1.getRank() ==1) {
+            return true;
+        }
+        return false;
+    }
 
-    public static boolean isSameSuit(Card card1, Card card2) { // a fundation vizsgálatánál kell használni.
-        return card1.getSuit() == card2.getSuit();
+    public static boolean isAscendingOrder(Card card1, Card card2) {
+            if ((card1.getRank() == card2.getRank() + 1) && (isSameSuit(card1, card2) == true)) {
+                return true;
+            }return false;
+        }
+
+    public static boolean isSameSuit(Card card1, Card card2) {
+            return card1.getSuit() == card2.getSuit();
     }
 
     public static List<Card> createNewDeck() {
