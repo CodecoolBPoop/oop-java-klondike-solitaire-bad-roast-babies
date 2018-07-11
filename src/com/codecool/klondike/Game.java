@@ -44,6 +44,12 @@ public class Game extends Pane {
             stockPile.numOfCards();
             discardPile.numOfCards(); //Counts the cards in the discord pile.
         }
+        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU )  {
+            //tableauPiles.get(i).getTopCard().flip();
+            if (card.isFaceDown()) {
+                card.flip();
+            }
+        }
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
