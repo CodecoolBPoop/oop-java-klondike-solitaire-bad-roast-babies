@@ -188,9 +188,20 @@ public class Game extends Pane {
 
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO Itt jön létre a deck. De a suffle-t egy másik kulön fugvényben csináljuk meg.
+        int countCard = 0;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j <= i; j++) {
+                tableauPiles.get(i).addCard(deck.get(countCard++));
+                if (j==i) {
+                    tableauPiles.get(j).getTopCard().flip();
+                }
+            }
+        }
+        for (; countCard < deck.size(); countCard++) {
+            stockPile.addCard(deck.get(countCard));
+        }
+
         deckIterator.forEachRemaining(card -> {
-            stockPile.addCard(card);
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
