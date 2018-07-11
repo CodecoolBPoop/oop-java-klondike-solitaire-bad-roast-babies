@@ -44,6 +44,12 @@ public class Game extends Pane {
             stockPile.numOfCards();
             discardPile.numOfCards(); //Counts the cards in the discord pile.
         }
+        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU )  {
+            //tableauPiles.get(i).getTopCard().flip();
+            if (card.isFaceDown()) {
+                card.flip();
+            }
+        }
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -191,11 +197,11 @@ public class Game extends Pane {
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
         int countCard = 0;
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < tableauPiles.size(); i++) {
             for (int j = 0; j <= i; j++) {
                 tableauPiles.get(i).addCard(deck.get(countCard++));
                 if (j==i) {
-                    tableauPiles.get(j).getTopCard().flip();
+                    tableauPiles.get(i).getTopCard().flip();
                 }
             }
         }
