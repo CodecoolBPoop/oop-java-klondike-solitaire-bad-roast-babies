@@ -101,11 +101,11 @@ public class Card extends ImageView {
             if (card1.getRank() == card2.getRank()-1) {
                 return true;
             } else return false;
-
-        }
     }
 
-    public static boolean isSameSuit(Card card1, Card card2) {
+
+
+    public static boolean isSameSuit(Card card1, Card card2) { // a fundation vizsgálatánál kell használni.
         return card1.getSuit() == card2.getSuit();
     }
 
@@ -145,5 +145,4 @@ public class Card extends ImageView {
             }
         }
     }
-
 }

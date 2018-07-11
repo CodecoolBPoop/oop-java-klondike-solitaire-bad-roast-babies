@@ -14,6 +14,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,7 +34,6 @@ public class Game extends Pane {
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
 
-
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
@@ -41,6 +41,8 @@ public class Game extends Pane {
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+            stockPile.numOfCards();
+            discardPile.numOfCards(); //Counts the cards in the discord pile.
         }
     };
 
@@ -77,8 +79,7 @@ public class Game extends Pane {
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);
-        //TODO
+        Pile pile = getValidIntersectingPile(card, tableauPiles);  // Ebben a methodusban már meghivtuk az isMOveValid methodust
         if (pile != null) {
             handleValidMove(card, pile);
         } else {
@@ -88,13 +89,15 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon() {
-        //TODO
+        //TODO win win
         return false;
     }
 
     public Game() {
         deck = Card.createNewDeck();
+        //System.out.println("deck" + deck.toString());
         initPiles();
+        shuffleCards();
         dealCards();
     }
 
@@ -106,7 +109,7 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
+        //TODO Discardbol visszarakni a kártyákat a stock-ba Itt hivd meg a cleart
         System.out.println("Stock refilled from discard pile.");
     }
 
@@ -115,7 +118,6 @@ public class Game extends Pane {
             return true;
         }
         return false;
-
 
     }
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
@@ -159,12 +161,14 @@ public class Game extends Pane {
         stockPile.setLayoutY(20);
         stockPile.setOnMouseClicked(stockReverseCardsHandler);
         getChildren().add(stockPile);
+        //stockPile.numOfCards();
 
         discardPile = new Pile(Pile.PileType.DISCARD, "Discard", STOCK_GAP);
         discardPile.setBlurredBackground();
         discardPile.setLayoutX(285);
         discardPile.setLayoutY(20);
         getChildren().add(discardPile);
+        //discardPile.numOfCards();
 
         for (int i = 0; i < 4; i++) {
             Pile foundationPile = new Pile(Pile.PileType.FOUNDATION, "Foundation " + i, FOUNDATION_GAP);
@@ -186,14 +190,31 @@ public class Game extends Pane {
 
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
+        int countCard = 0;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j <= i; j++) {
+                tableauPiles.get(i).addCard(deck.get(countCard++));
+                if (j==i) {
+                    tableauPiles.get(j).getTopCard().flip();
+                }
+            }
+        }
+        for (; countCard < deck.size(); countCard++) {
+            stockPile.addCard(deck.get(countCard));
+        }
+
         deckIterator.forEachRemaining(card -> {
-            stockPile.addCard(card);
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
+        stockPile.numOfCards(); //Counts the cards in the stock pile.
 
     }
+
+    public void shuffleCards() {
+        Collections.shuffle(deck);
+    }
+
 
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
@@ -201,4 +222,22 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
+    @Override
+    public String toString() {
+        return "Game{" +
+                "deck=" + deck +
+                ", stockPile=" + stockPile +
+                ", discardPile=" + discardPile +
+                ", foundationPiles=" + foundationPiles +
+                ", tableauPiles=" + tableauPiles +
+                ", dragStartX=" + dragStartX +
+                ", dragStartY=" + dragStartY +
+                ", draggedCards=" + draggedCards +
+                ", onMouseClickedHandler=" + onMouseClickedHandler +
+                ", stockReverseCardsHandler=" + stockReverseCardsHandler +
+                ", onMousePressedHandler=" + onMousePressedHandler +
+                ", onMouseDraggedHandler=" + onMouseDraggedHandler +
+                ", onMouseReleasedHandler=" + onMouseReleasedHandler +
+                '}';
+    }
 }
