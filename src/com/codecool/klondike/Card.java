@@ -104,6 +104,13 @@ public class Card extends ImageView {
         }
     }
 
+    public static boolean isItAKing(Card card) {
+        if (card.getRank() == 13) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static boolean isSameSuit(Card card1, Card card2) { // a fundation vizsgálatánál kell használni.
         return card1.getSuit() == card2.getSuit();

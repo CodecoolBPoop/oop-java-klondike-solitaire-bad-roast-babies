@@ -30,7 +30,7 @@ public class Game extends Pane {
     private double dragStartX, dragStartY;
     private List<Card> draggedCards = FXCollections.observableArrayList();
 
-    private static double STOCK_GAP = 1;
+    private static double STOCK_GAP = 0.3;
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
 
@@ -41,8 +41,8 @@ public class Game extends Pane {
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
-            stockPile.numOfCards();
-            discardPile.numOfCards(); //Counts the cards in the discord pile.
+            stockPile.numOfCards(); //Counts the cards in the discord pile during the game.
+            discardPile.numOfCards(); //Counts the cards in the discord pile during the game.
         }
         if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU )  {
             //tableauPiles.get(i).getTopCard().flip();
@@ -123,12 +123,19 @@ public class Game extends Pane {
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        if ((Card.isOppositeColor(card,destPile.getTopCard()) == true) && (Card.isDescendingOrder(card,destPile.getTopCard())==true)) {
-            return true;
+        if (destPile.getTopCard() == null) {
+            if (Card.isItAKing(card) == true) {
+                return true;
+            }
+            return false;
+        } else {
+            if ((Card.isOppositeColor(card, destPile.getTopCard()) == true) && (Card.isDescendingOrder(card, destPile.getTopCard()) == true)) {
+                return true;
+            }
+            return false;
         }
-        return false;
-
     }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
@@ -162,7 +169,6 @@ public class Game extends Pane {
         draggedCards.clear();
     }
 
-
     private void initPiles() {
         stockPile = new Pile(Pile.PileType.STOCK, "Stock", STOCK_GAP);
         stockPile.setBlurredBackground();
@@ -170,14 +176,12 @@ public class Game extends Pane {
         stockPile.setLayoutY(20);
         stockPile.setOnMouseClicked(stockReverseCardsHandler);
         getChildren().add(stockPile);
-        //stockPile.numOfCards();
 
         discardPile = new Pile(Pile.PileType.DISCARD, "Discard", STOCK_GAP);
         discardPile.setBlurredBackground();
         discardPile.setLayoutX(285);
         discardPile.setLayoutY(20);
         getChildren().add(discardPile);
-        //discardPile.numOfCards();
 
         for (int i = 0; i < 4; i++) {
             Pile foundationPile = new Pile(Pile.PileType.FOUNDATION, "Foundation " + i, FOUNDATION_GAP);
@@ -216,14 +220,13 @@ public class Game extends Pane {
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
-        stockPile.numOfCards(); //Counts the cards in the stock pile.
+        stockPile.numOfCards(); //Counts the cards in the stock pile at the start.
 
     }
 
     public void shuffleCards() {
         Collections.shuffle(deck);
     }
-
 
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
