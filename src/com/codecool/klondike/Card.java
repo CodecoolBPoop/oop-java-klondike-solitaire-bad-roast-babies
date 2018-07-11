@@ -94,6 +94,17 @@ public class Card extends ImageView {
         }
     }
 
+    public static boolean isDescendingOrder(Card card1, Card card2) {
+        if (card2 == null) {
+            return true;
+        } else {
+            if (card1.getRank() == card2.getRank()-1) {
+                return true;
+            } else return false;
+
+        }
+    }
+
     public static boolean isSameSuit(Card card1, Card card2) {
         return card1.getSuit() == card2.getSuit();
     }
