@@ -79,11 +79,12 @@ public class Game extends Pane {
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);
-        Pile foundpile = getValidIntersectingPile(card, foundationPiles);
-        if (pile != null || foundpile !=null) {
-//            handleValidMove(card, pile);
-            handleValidMove(card, foundpile);
+        Pile tableaupile = getValidIntersectingPile(card, tableauPiles);
+        Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
+        if (tableaupile != null) {
+            handleValidMove(card, tableaupile);
+        }else if (foundationpile!=null) {
+            handleValidMove(card, foundationpile);
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -126,18 +127,13 @@ public class Game extends Pane {
             } else {
                 if (Card.isAscendingOrder(card, destPile.getTopCard()) == true) {
                     return true;
-
                 }
                 return false;
-
             }
 
         } else if (destPile.getPileType().equals(Pile.PileType.TABLEAU)) {
             if (destPile.getTopCard() == null) {
-                System.out.println("üres oszlop");
-
-                //ZSolti's
-
+                return false;
 
             } else {
                 if ((Card.isOppositeColor(card, destPile.getTopCard()) == true) &&
