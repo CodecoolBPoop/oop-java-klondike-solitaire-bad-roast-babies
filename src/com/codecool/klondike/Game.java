@@ -115,8 +115,11 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO Discardbol visszarakni a kártyákat a stock-ba Itt hivd meg a cleart
-        System.out.println("Stock refilled from discard pile.");
+        ArrayList<Card> lista = new ArrayList<Card>(discardPile.getCards());
+        for (Card item: lista) {
+            item.moveToPile(stockPile);
+            item.flip();
+        }
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
