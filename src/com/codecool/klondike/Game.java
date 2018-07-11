@@ -85,9 +85,12 @@ public class Game extends Pane {
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);  // Ebben a methodusban már meghivtuk az isMOveValid methodust
-        if (pile != null) {
-            handleValidMove(card, pile);
+        Pile tableaupile = getValidIntersectingPile(card, tableauPiles);
+        Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
+        if (tableaupile != null) {
+            handleValidMove(card, tableaupile);
+        }else if (foundationpile!=null) {
+            handleValidMove(card, foundationpile);
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -123,17 +126,34 @@ public class Game extends Pane {
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        if (destPile.getTopCard() == null) {
-            if (Card.isItAKing(card) == true) {
-                return true;
+        if (destPile.getPileType().equals(Pile.PileType.FOUNDATION)) {
+
+            if (destPile.getTopCard() == null) {
+                if (Card.isAce(card) == true) {
+                    return true;
+                }
+                return false;
+            } else {
+                if (Card.isAscendingOrder(card, destPile.getTopCard()) == true) {
+                    return true;
+                }
+                return false;
             }
-            return false;
-        } else {
-            if ((Card.isOppositeColor(card, destPile.getTopCard()) == true) && (Card.isDescendingOrder(card, destPile.getTopCard()) == true)) {
-                return true;
+
+        } else if (destPile.getPileType().equals(Pile.PileType.TABLEAU)) {
+            if (destPile.getTopCard() == null) {
+                if (Card.isItAKing(card) == true) {
+                    return true;
+                }
+                return false;
+            } else {
+                if ((Card.isOppositeColor(card, destPile.getTopCard()) == true) && 
+                    (Card.isDescendingOrder(card, destPile.getTopCard()) == true)) {
+                    return true;
+                }
+                return false;
             }
-            return false;
-        }
+        }return false;
     }
 
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
