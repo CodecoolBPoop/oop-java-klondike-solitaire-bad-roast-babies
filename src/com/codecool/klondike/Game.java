@@ -80,12 +80,11 @@ public class Game extends Pane {
             return;
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, tableauPiles);  // Ebben a methodusban már meghivtuk az isMOveValid methodust
-        //TODO check cards color and number.
         if (pile != null) {
             handleValidMove(card, pile);
         } else {
-            draggedCards.forEach(MouseUtil::slideBack); // Ez egy lista ami minden egyes mozgatott kártyát tartalmaz.
-            draggedCards = null;
+            draggedCards.forEach(MouseUtil::slideBack);
+            draggedCards.clear();
         }
     };
 
@@ -115,8 +114,11 @@ public class Game extends Pane {
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        //TODO Ellenörizd a kártya jó helyen van e.
-        return true;
+        if ((Card.isOppositeColor(card,destPile.getTopCard()) == true) && (Card.isDescendingOrder(card,destPile.getTopCard())==true)) {
+            return true;
+        }
+        return false;
+
     }
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
