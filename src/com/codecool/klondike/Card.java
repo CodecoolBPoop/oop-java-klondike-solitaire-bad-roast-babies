@@ -78,30 +78,22 @@ public class Card extends ImageView {
     }
 
     public static boolean isOppositeColor(Card card1, Card card2) {
-        if (card2 == null){
-            return true;
+        if ((card1.getSuit() == 4 || card1.getSuit() == 3) && (card2.getSuit() == 3 || card2.getSuit() == 4)) {
+            System.out.println("azonos");
+            return false;
+        } else if ((card1.getSuit() == 1 || card1.getSuit() == 2) && (card2.getSuit() == 1 || card2.getSuit() == 2)) {
+            System.out.println("azonos");
+            return false;
         } else {
-            if ((card1.getSuit() == 4 || card1.getSuit() == 3) && (card2.getSuit() == 3 || card2.getSuit() == 4)) {
-                System.out.println("azonos");
-                return false;
-            } else if ((card1.getSuit() == 1 || card1.getSuit() == 2) && (card2.getSuit() == 1 || card2.getSuit() == 2)) {
-                System.out.println("azonos");
-                return false;
-            } else {
-                System.out.println("váltott színek");
-                return true;
-            }
+            System.out.println("váltott színek");
+            return true;
         }
     }
 
     public static boolean isDescendingOrder(Card card1, Card card2) {
-        if (card2 == null) {
+        if (card1.getRank() == card2.getRank() - 1) {
             return true;
-        } else {
-            if (card1.getRank() == card2.getRank() - 1) {
-                return true;
-            } else return false;
-        }
+        } else return false;
     }
 
     public static boolean isAce(Card card1) {
