@@ -110,20 +110,11 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-         // stockPile  discardPile
-
-        //TODO Discardbol visszarakni a kártyákat a stock-ba Itt hivd meg a cleart
-        //System.out.println("Ez a discard " + discardPile.getCards());
-        //System.out.println("Ez a stock mikor már ures" + stockPile.getCards());
         ArrayList<Card> lista = new ArrayList<Card>(discardPile.getCards());
-        //stockPile.addCard((Card)discardPile.getCards());
-
-        for (Object item: lista) {
-            System.out.println(item);
-            stockPile.addCard((Card)item);
+        for (Card item: lista) {
+            item.moveToPile(stockPile);
+            item.flip();
         }
-        //Card card = (Card) stockPile.getCards();
-
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
