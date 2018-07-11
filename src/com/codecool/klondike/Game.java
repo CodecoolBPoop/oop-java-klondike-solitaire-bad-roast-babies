@@ -79,9 +79,11 @@ public class Game extends Pane {
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);  // Ebben a methodusban már meghivtuk az isMOveValid methodust
-        if (pile != null) {
-            handleValidMove(card, pile);
+        Pile pile = getValidIntersectingPile(card, tableauPiles);
+        Pile foundpile = getValidIntersectingPile(card, foundationPiles);
+        if (pile != null || foundpile !=null) {
+//            handleValidMove(card, pile);
+            handleValidMove(card, foundpile);
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -114,7 +116,10 @@ public class Game extends Pane {
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        if ((Card.isOppositeColor(card,destPile.getTopCard()) == true) && (Card.isDescendingOrder(card,destPile.getTopCard())==true)) {
+//        if ((Card.isOppositeColor(card,destPile.getTopCard()) == true) && (Card.isDescendingOrder(card,destPile.getTopCard())==true)) {
+//            return true;
+//        }
+        if (Card.isAscendingOrder(card,destPile.getTopCard()) == true) {
             return true;
         }
         return false;

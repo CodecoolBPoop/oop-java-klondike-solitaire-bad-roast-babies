@@ -98,15 +98,27 @@ public class Card extends ImageView {
         if (card2 == null) {
             return true;
         } else {
-            if (card1.getRank() == card2.getRank()-1) {
+            if (card1.getRank() == card2.getRank() - 1) {
                 return true;
             } else return false;
+        }
+    }
+
+    public static boolean isAscendingOrder(Card card1, Card card2) {
+        if ((card2 == null) && (card1.getRank() == 1)) {
+            return true;
+        } else if (card2 != null) {
+            if ((card1.getRank() == card2.getRank() + 1) && (isSameSuit(card1, card2) == true)) {
+                return true;
+            }
+        } return false;
+
     }
 
 
+    public static boolean isSameSuit(Card card1, Card card2) {
+            return card1.getSuit() == card2.getSuit();
 
-    public static boolean isSameSuit(Card card1, Card card2) { // a fundation vizsgálatánál kell használni.
-        return card1.getSuit() == card2.getSuit();
     }
 
     public static List<Card> createNewDeck() {
