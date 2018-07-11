@@ -46,7 +46,8 @@ public class Game extends Pane {
         }
         if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU )  {
             //tableauPiles.get(i).getTopCard().flip();
-            if (card.isFaceDown()) {
+
+            if (card.isFaceDown()) { //todo: get first element only
                 card.flip();
             }
         }
@@ -64,19 +65,50 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
+        draggedCards.clear();
+        card.toFront();
+
+        if (activePile.getPileType() == Pile.PileType.STOCK) {
+            return;
+        }
+        double offsetX = e.getSceneX() - dragStartX;
+        double offsetY = e.getSceneY() - dragStartY;
+
+        if (activePile.getPileType() == Pile.PileType.TABLEAU){
+
+            int index = 0;
+            for (int i = 0; i < card.getContainingPile().getCards().size(); i++) {
+                if (card.getContainingPile().getCards().get(i).equals(card)) {
+                    index = i;
+                    break;
+                }
+            }
+            for (int i = index + 1; i < card.getContainingPile().getCards().size(); i++) {
+                draggedCards.add(card.getContainingPile().getCards().get(i));
+
+                System.out.println(draggedCards);
+            }
+            for (Card item: draggedCards) {
+
+                item.setTranslateX(offsetX);
+                item.setTranslateY(offsetY);
+                item.toFront();
+            }
+        }
+        /*
         if (activePile.getPileType() == Pile.PileType.STOCK)
             return;
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
-
-        draggedCards.clear();
+        */
+        //draggedCards.clear();
         draggedCards.add(card);
+        System.out.println("egy card" + draggedCards);
 
         card.getDropShadow().setRadius(20);
         card.getDropShadow().setOffsetX(10);
         card.getDropShadow().setOffsetY(10);
 
-        card.toFront();
         card.setTranslateX(offsetX);
         card.setTranslateY(offsetY);
     };
@@ -85,7 +117,9 @@ public class Game extends Pane {
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
+
         Pile pile = getValidIntersectingPile(card, tableauPiles);  // Ebben a methodusban már meghivtuk az isMOveValid methodust
+        System.out.println(tableauPiles.get(0));
         if (pile != null) {
             handleValidMove(card, pile);
         } else {
