@@ -312,7 +312,6 @@ public class Game extends Pane {
         buttonRestartGame.setPrefSize(100, 20);
         buttonRestartGame.setLayoutY(50);
 
-        Scene primaryStage = getScene();
         buttonRestartGame.setOnAction(__ ->
         {
             System.out.println("restarting app");
@@ -320,7 +319,19 @@ public class Game extends Pane {
             dealCards();
         });
 
-        vbox.getChildren().addAll(buttonNewGame, buttonRestartGame);
+        Button buttonSkin = new Button("Change Skin");
+        buttonSkin.setPrefSize(100, 20);
+        buttonSkin.setLayoutY(150);
+        buttonSkin.setOnAction(__ ->
+        {
+            restart();
+            Card.loadCardImages2();
+           deck = Card.createNewDeck();
+            shuffleCards();
+            dealCards();
+        });
+
+        vbox.getChildren().addAll(buttonNewGame, buttonRestartGame, buttonSkin);
         return vbox;
     }
 
