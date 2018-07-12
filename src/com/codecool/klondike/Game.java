@@ -92,8 +92,6 @@ public class Game extends Pane {
             handleValidMove(card, tableaupile);
         }else if (foundationpile!=null) {
             handleValidMove(card, foundationpile);
-            foundationpile.addCard(card);
-            isGameWon();
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
