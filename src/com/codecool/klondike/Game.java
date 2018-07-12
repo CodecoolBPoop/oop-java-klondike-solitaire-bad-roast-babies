@@ -80,6 +80,7 @@ public class Game extends Pane {
 
         if (activePile.getPileType() == Pile.PileType.TABLEAU) {
 
+
             for (int i = activePile.getCards().indexOf(card); i < activePile.getCards().size(); i++) {
                 draggedCards.add(activePile.getCards().get(i));
             }
@@ -99,11 +100,17 @@ public class Game extends Pane {
         }
     };
 
+
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
-        System.out.println(isGameWon());
+
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
+
+        Pile pile = getValidIntersectingPile(card, tableauPiles);  // Ebben a methodusban már meghivtuk az isMOveValid methodust
+
+        if (pile != null) {
+            handleValidMove(card, pile);
         Pile tableaupile = getValidIntersectingPile(card, tableauPiles);
         Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
         System.out.println(foundationPiles);
@@ -145,8 +152,10 @@ public class Game extends Pane {
         //System.out.println("deck" + deck.toString());
         initPiles();
         shuffleCards();
+
         dealCards();
     }
+
 
     public void addMouseEventHandlers(Card card) {
         card.setOnMousePressed(onMousePressedHandler);
@@ -157,7 +166,7 @@ public class Game extends Pane {
 
     public void refillStockFromDiscard() {
         ArrayList<Card> lista = new ArrayList<Card>(discardPile.getCards());
-        for (Card item: lista) {
+        for (Card item : lista) {
             item.moveToPile(stockPile);
             item.flip();
         }
@@ -193,7 +202,7 @@ public class Game extends Pane {
             }
         }return false;
     }
-
+        
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
@@ -281,6 +290,7 @@ public class Game extends Pane {
         deckIterator.forEachRemaining(card -> {
             addMouseEventHandlers(card);
             getChildren().add(card);
+
         });
         stockPile.numOfCards(); //Counts the cards in the stock pile at the start.
 
