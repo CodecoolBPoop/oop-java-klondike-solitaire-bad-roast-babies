@@ -14,6 +14,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,19 +30,26 @@ public class Game extends Pane {
     private double dragStartX, dragStartY;
     private List<Card> draggedCards = FXCollections.observableArrayList();
 
-    private static double STOCK_GAP = 1;
+    private static double STOCK_GAP = 0.3;
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
 
-
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
+        Pile activePile = card.getContainingPile();
+        Card topCard = activePile.getTopCard();
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+            stockPile.numOfCards(); //Counts the cards in the discord pile during the game.
+            discardPile.numOfCards(); //Counts the cards in the discord pile during the game.
         }
+        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU)
+            if (card.isFaceDown() && (topCard.equals(card))) {
+                card.flip();
+            }
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -56,47 +64,76 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK)
+        draggedCards.clear();
+        card.toFront();
+
+        if (activePile.getPileType() == Pile.PileType.STOCK) {
             return;
+        }
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
-        draggedCards.clear();
-        draggedCards.add(card);
+        if (activePile.getPileType() == Pile.PileType.TABLEAU) {
 
-        card.getDropShadow().setRadius(20);
-        card.getDropShadow().setOffsetX(10);
-        card.getDropShadow().setOffsetY(10);
 
-        card.toFront();
-        card.setTranslateX(offsetX);
-        card.setTranslateY(offsetY);
+            for (int i = activePile.getCards().indexOf(card); i < activePile.getCards().size(); i++) {
+                draggedCards.add(activePile.getCards().get(i));
+            }
+
+        } else {
+            draggedCards.add(card);
+        }
+
+        for (Card item : draggedCards) {
+            item.getDropShadow().setRadius(20);
+            item.getDropShadow().setOffsetX(10);
+            item.getDropShadow().setOffsetY(10);
+
+            item.setTranslateX(offsetX);
+            item.setTranslateY(offsetY);
+            item.toFront();
+        }
+
+
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
+
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);
-        //TODO
+
+        Pile pile = getValidIntersectingPile(card, tableauPiles);  // Ebben a methodusban már meghivtuk az isMOveValid methodust
+
         if (pile != null) {
             handleValidMove(card, pile);
+        Pile tableaupile = getValidIntersectingPile(card, tableauPiles);
+        Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
+        if (tableaupile != null) {
+            handleValidMove(card, tableaupile);
+        }else if (foundationpile!=null) {
+            handleValidMove(card, foundationpile);
+
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = null;
+            draggedCards.clear();
         }
     };
 
     public boolean isGameWon() {
-        //TODO
+        //TODO win win
         return false;
     }
 
     public Game() {
         deck = Card.createNewDeck();
+        //System.out.println("deck" + deck.toString());
         initPiles();
+        shuffleCards();
+
         dealCards();
     }
+
 
     public void addMouseEventHandlers(Card card) {
         card.setOnMousePressed(onMousePressedHandler);
@@ -106,14 +143,44 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
-        System.out.println("Stock refilled from discard pile.");
+        ArrayList<Card> lista = new ArrayList<Card>(discardPile.getCards());
+        for (Card item : lista) {
+            item.moveToPile(stockPile);
+            item.flip();
+        }
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        //TODO
-        return true;
+        if (destPile.getPileType().equals(Pile.PileType.FOUNDATION)) {
+
+            if (destPile.getTopCard() == null) {
+                if (Card.isAce(card) == true) {
+                    return true;
+                }
+                return false;
+            } else {
+                if (Card.isAscendingOrder(card, destPile.getTopCard()) == true) {
+                    return true;
+                }
+                return false;
+            }
+
+        } else if (destPile.getPileType().equals(Pile.PileType.TABLEAU)) {
+            if (destPile.getTopCard() == null) {
+                if (Card.isItAKing(card) == true) {
+                    return true;
+                }
+                return false;
+            } else {
+                if ((Card.isOppositeColor(card, destPile.getTopCard()) == true) && 
+                    (Card.isDescendingOrder(card, destPile.getTopCard()) == true)) {
+                    return true;
+                }
+                return false;
+            }
+        }return false;
     }
+        
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
@@ -146,7 +213,6 @@ public class Game extends Pane {
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
     }
-
 
     private void initPiles() {
         stockPile = new Pile(Pile.PileType.STOCK, "Stock", STOCK_GAP);
@@ -182,13 +248,30 @@ public class Game extends Pane {
 
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
+        int countCard = 0;
+        for (int i = 0; i < tableauPiles.size(); i++) {
+            for (int j = 0; j <= i; j++) {
+                tableauPiles.get(i).addCard(deck.get(countCard++));
+                if (j == i) {
+                    tableauPiles.get(i).getTopCard().flip();
+                }
+            }
+        }
+        for (; countCard < deck.size(); countCard++) {
+            stockPile.addCard(deck.get(countCard));
+        }
+
         deckIterator.forEachRemaining(card -> {
-            stockPile.addCard(card);
             addMouseEventHandlers(card);
             getChildren().add(card);
-        });
 
+        });
+        stockPile.numOfCards(); //Counts the cards in the stock pile at the start.
+
+    }
+
+    public void shuffleCards() {
+        Collections.shuffle(deck);
     }
 
     public void setTableBackground(Image tableBackground) {
@@ -197,4 +280,22 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
+    @Override
+    public String toString() {
+        return "Game{" +
+                "deck=" + deck +
+                ", stockPile=" + stockPile +
+                ", discardPile=" + discardPile +
+                ", foundationPiles=" + foundationPiles +
+                ", tableauPiles=" + tableauPiles +
+                ", dragStartX=" + dragStartX +
+                ", dragStartY=" + dragStartY +
+                ", draggedCards=" + draggedCards +
+                ", onMouseClickedHandler=" + onMouseClickedHandler +
+                ", stockReverseCardsHandler=" + stockReverseCardsHandler +
+                ", onMousePressedHandler=" + onMousePressedHandler +
+                ", onMouseDraggedHandler=" + onMouseDraggedHandler +
+                ", onMouseReleasedHandler=" + onMouseReleasedHandler +
+                '}';
+    }
 }

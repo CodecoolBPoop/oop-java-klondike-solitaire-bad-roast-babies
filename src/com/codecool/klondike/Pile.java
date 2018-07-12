@@ -14,7 +14,7 @@ import java.util.ListIterator;
 public class Pile extends Pane {
 
     private PileType pileType;
-    private String name;
+    private String name; // Fasznak sem kell. ... törölhető
     private double cardGap;
     private ObservableList<Card> cards = FXCollections.observableArrayList();
 
@@ -40,8 +40,10 @@ public class Pile extends Pane {
     }
 
     public int numOfCards() {
-        //TODO
-        return 1;
+        int numberOfCards = cards.size();
+//        String pileName = getName(); //How to print out the name of the pile?
+ //       System.out.println("There is " + numberOfCards + " cards in ? pile.");
+        return numberOfCards;
     }
 
     public boolean isEmpty() {
@@ -49,7 +51,7 @@ public class Pile extends Pane {
     }
 
     public void clear() {
-        //TODO
+        this.clear();
     }
 
     public void addCard(Card card) {
@@ -88,5 +90,15 @@ public class Pile extends Pane {
         DISCARD,
         FOUNDATION,
         TABLEAU
+    }
+
+    @Override
+    public String toString() {
+        return "Pile{" +
+                "pileType=" + pileType +
+                ", name='" + name + '\'' +
+                ", cardGap=" + cardGap +
+                ", cards=" + cards +
+                '}';
     }
 }
