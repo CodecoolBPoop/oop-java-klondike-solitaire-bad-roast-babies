@@ -2,6 +2,7 @@ package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
@@ -232,6 +233,37 @@ public class Game extends Pane {
         }
     }
 
+    private void restart () {
+        for (Pile p : tableauPiles) {
+            for (Card c : p.getCards()) {
+                getChildren().remove(c);
+            }
+            p.getCards().clear();
+        }
+
+        for (Pile p : foundationPiles) {
+            for (Card c : p.getCards()) {
+                getChildren().remove(c);
+            }
+            p.getCards().clear();
+        }
+
+        for (Card c : stockPile.getCards()) {
+            getChildren().remove(c);
+        }
+        stockPile.getCards().clear();
+
+        for (Card c : discardPile.getCards()) {
+
+            getChildren().remove(c);
+        }
+
+/*        deck.clear();
+        discardPile.getCards().clear();
+        deck = Card.createNewDeck();*/
+
+    }
+
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
         int countCard = 0;
@@ -239,7 +271,8 @@ public class Game extends Pane {
             for (int j = 0; j <= i; j++) {
                 tableauPiles.get(i).addCard(deck.get(countCard++));
                 if (j==i) {
-                    tableauPiles.get(i).getTopCard().flip();
+                    if (tableauPiles.get(i).getTopCard().isFaceDown())
+                        tableauPiles.get(i).getTopCard().flip();
                 }
             }
         }
@@ -252,7 +285,6 @@ public class Game extends Pane {
             getChildren().add(card);
         });
         stockPile.numOfCards(); //Counts the cards in the stock pile at the start.
-
     }
 
     public void shuffleCards() {
@@ -271,20 +303,22 @@ public class Game extends Pane {
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #336699;");
 
-        Button buttonNewGame = new Button("New Game");
-        buttonNewGame.setPrefSize(100, 20);
-
-        Button buttonRestartGame = new Button("RestartGame");
-        buttonRestartGame.setPrefSize(100, 20);
-        buttonRestartGame.setOnAction((event) -> {
-//            stockPile.clear();
-//            discardPile.clear();
-            tableauPiles.clear();
-//            foundationPiles.clear();
+        Button newGameButton = new Button("New Game");
+        newGameButton.setPrefSize(100, 20);
+        newGameButton.setOnAction(e -> {
+            restart();
+            shuffleCards();
             dealCards();
         });
 
-        hbox.getChildren().addAll(buttonNewGame, buttonRestartGame);
+        Button restartGameButton = new Button("Restart Game");
+        restartGameButton.setPrefSize(100, 20);
+        restartGameButton.setOnAction(e -> {
+            restart();
+            dealCards();
+        });
+
+        hbox.getChildren().addAll(newGameButton, restartGameButton);
 
         return hbox;
     }
