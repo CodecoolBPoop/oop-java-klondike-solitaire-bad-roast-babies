@@ -19,20 +19,16 @@ import java.util.List;
 
 public class Game extends Pane {
 
+    private static double STOCK_GAP = 0.3;
+    private static double FOUNDATION_GAP = 0;
+    private static double TABLEAU_GAP = 30;
     private List<Card> deck = new ArrayList<>();
-
     private Pile stockPile;
     private Pile discardPile;
     private List<Pile> foundationPiles = FXCollections.observableArrayList();
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
-
     private double dragStartX, dragStartY;
     private List<Card> draggedCards = FXCollections.observableArrayList();
-
-    private static double STOCK_GAP = 0.3;
-    private static double FOUNDATION_GAP = 0;
-    private static double TABLEAU_GAP = 30;
-
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
@@ -116,9 +112,9 @@ public class Game extends Pane {
                 handleValidMove(card, tableaupile);
                 if (!card.getContainingPile().getPileType().equals(Pile.PileType.DISCARD) && card.getContainingPile().getLastoBeforeTopCard().isFaceDown())
                     card.getContainingPile().getLastoBeforeTopCard().flip();
-                    System.out.println("szivás");
+                System.out.println("szivás");
             }
-        }else if (foundationpile!=null) {
+        } else if (foundationpile != null) {
             if (draggedCards.size() <= 1) {
                 handleValidMove(card, foundationpile);
                 isGameWon();
@@ -132,20 +128,21 @@ public class Game extends Pane {
 
     };
 
-    public boolean isGameWon() {
-        if ((foundationPiles.get(0).numOfCards() ==1) && (foundationPiles.get(1).numOfCards() ==1) &&
-                (foundationPiles.get(2).numOfCards() ==1) && (foundationPiles.get(3).numOfCards() ==1)) {
-            JOptionPane.showMessageDialog(null, "You won!!!!!", "Goood boooy!!", JOptionPane.PLAIN_MESSAGE);
-            return true;
-        }return false;
-    }
-
     public Game() {
         deck = Card.createNewDeck();
         //System.out.println("deck" + deck.toString());
         initPiles();
         shuffleCards();
         dealCards();
+    }
+
+    public boolean isGameWon() {
+        if ((foundationPiles.get(0).numOfCards() == 1) && (foundationPiles.get(1).numOfCards() == 1) &&
+                (foundationPiles.get(2).numOfCards() == 1) && (foundationPiles.get(3).numOfCards() == 1)) {
+            JOptionPane.showMessageDialog(null, "You won!!!!!", "Goood boooy!!", JOptionPane.PLAIN_MESSAGE);
+            return true;
+        }
+        return false;
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -157,7 +154,7 @@ public class Game extends Pane {
 
     public void refillStockFromDiscard() {
         ArrayList<Card> lista = new ArrayList<Card>(discardPile.getCards());
-        for (Card item: lista) {
+        for (Card item : lista) {
             item.moveToPile(stockPile);
             item.flip();
         }
@@ -185,13 +182,14 @@ public class Game extends Pane {
                 }
                 return false;
             } else {
-                if ((Card.isOppositeColor(card, destPile.getTopCard()) == true) && 
-                    (Card.isDescendingOrder(card, destPile.getTopCard()) == true)) {
+                if ((Card.isOppositeColor(card, destPile.getTopCard()) == true) &&
+                        (Card.isDescendingOrder(card, destPile.getTopCard()) == true)) {
                     return true;
                 }
                 return false;
             }
-        }return false;
+        }
+        return false;
     }
 
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
@@ -265,7 +263,7 @@ public class Game extends Pane {
         for (int i = 0; i < tableauPiles.size(); i++) {
             for (int j = 0; j <= i; j++) {
                 tableauPiles.get(i).addCard(deck.get(countCard++));
-                if (j==i) {
+                if (j == i) {
                     if (tableauPiles.get(i).getTopCard().isFaceDown())
                         tableauPiles.get(i).getTopCard().flip();
 /*                } else {
@@ -309,9 +307,9 @@ public class Game extends Pane {
         buttonRestartGame.setPrefSize(100, 20);
 
         Scene primaryStage = getScene();
-        buttonRestartGame.setOnAction( __ ->
+        buttonRestartGame.setOnAction(__ ->
         {
-            System.out.println( "Restarting app!" );
+            System.out.println("Restarting app!");
             restart();
 
 
@@ -323,7 +321,7 @@ public class Game extends Pane {
             }*/
             dealCards();
 
-        } );
+        });
 
 
 /*        buttonRestartGame.setOnAction((event) -> {
@@ -339,7 +337,7 @@ public class Game extends Pane {
         return hbox;
     }
 
-    private void restart () {
+    private void restart() {
         for (Pile p : tableauPiles) {
             for (Card c : p.getCards()) {
                 getChildren().remove(c);

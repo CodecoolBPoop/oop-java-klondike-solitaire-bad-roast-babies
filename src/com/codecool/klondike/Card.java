@@ -102,7 +102,7 @@ public class Card extends ImageView {
     }
 
     public static boolean isAce(Card card1) {
-        if (card1.getRank() ==1) {
+        if (card1.getRank() == 1) {
             return true;
         }
         return false;
