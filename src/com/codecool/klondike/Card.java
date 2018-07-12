@@ -83,16 +83,6 @@ public class Card extends ImageView {
         } else if ((card1.getSuit() == 1 || card1.getSuit() == 2) && (card2.getSuit() == 1 || card2.getSuit() == 2)) {
             return false;
         } else {
-            if ((card1.getSuit() == 4 || card1.getSuit() == 3) && (card2.getSuit() == 3 || card2.getSuit() == 4)) {
-  //              System.out.println("azonos");
-                return false;
-            } else if ((card1.getSuit() == 1 || card1.getSuit() == 2) && (card2.getSuit() == 1 || card2.getSuit() == 2)) {
-  //              System.out.println("azonos");
-                return false;
-            } else {
-    //            System.out.println("váltott színek");
-                return true;
-            }
             return true;
         }
     }
