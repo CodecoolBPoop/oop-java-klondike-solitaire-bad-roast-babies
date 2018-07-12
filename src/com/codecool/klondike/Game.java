@@ -92,6 +92,7 @@ public class Game extends Pane {
             handleValidMove(card, tableaupile);
         }else if (foundationpile!=null) {
             handleValidMove(card, foundationpile);
+            isGameWon();
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -99,14 +100,21 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon() {
-        for (int i = 0; i<foundationPiles.size(); i++) {
-            if (i == 4) {
-                System.out.println("you won");
-                return true;
-            }
+        if ((foundationPiles.get(0).numOfCards() ==1) && (foundationPiles.get(1).numOfCards() ==1) &&
+                (foundationPiles.get(2).numOfCards() ==1) && (foundationPiles.get(3).numOfCards() ==1)) {
+            System.out.println("you won");
+            return true;
+        }return false;
+//        for (int i = 0; i < foundationPiles.size(); i++) {
+//            if (foundationPiles.get(i).numOfCards() == 1) {
+//                System.out.println("not yet");
+//            }else {
+//                return false;
+//            }
+//        }
+//        System.out.println("you win");
+//        return true;
 
-        }
-        return false;
     }
 
     public Game() {
