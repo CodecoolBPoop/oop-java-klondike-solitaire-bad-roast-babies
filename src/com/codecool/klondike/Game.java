@@ -151,12 +151,6 @@ public class Game extends Pane {
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-
-        if ((Card.isOppositeColor(card, destPile.getTopCard()) == true) && (Card.isDescendingOrder(card, destPile.getTopCard()) == true)) {
-            return true;
-        }
-        return false;
-
         if (destPile.getPileType().equals(Pile.PileType.FOUNDATION)) {
 
             if (destPile.getTopCard() == null) {
@@ -170,7 +164,6 @@ public class Game extends Pane {
                 }
                 return false;
             }
-
 
         } else if (destPile.getPileType().equals(Pile.PileType.TABLEAU)) {
             if (destPile.getTopCard() == null) {
@@ -187,7 +180,7 @@ public class Game extends Pane {
             }
         }return false;
     }
-
+        
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
@@ -271,8 +264,6 @@ public class Game extends Pane {
         deckIterator.forEachRemaining(card -> {
             addMouseEventHandlers(card);
             getChildren().add(card);
-
-            //ListChangeListener<Card>
 
         });
         stockPile.numOfCards(); //Counts the cards in the stock pile at the start.
