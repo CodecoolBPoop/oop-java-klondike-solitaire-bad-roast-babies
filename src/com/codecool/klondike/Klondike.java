@@ -25,5 +25,9 @@ public class Klondike extends Application {
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();
     }
-//TODO valahol a code direkt hibákat generál. TAláld meg és csináld meg .
+
+    public void restart(Stage stage) {
+        start(stage);
+        }
+
 }

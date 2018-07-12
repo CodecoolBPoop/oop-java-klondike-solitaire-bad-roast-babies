@@ -4,12 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -98,12 +100,13 @@ public class Game extends Pane {
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
+        System.out.println(isGameWon());
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
         Pile tableaupile = getValidIntersectingPile(card, tableauPiles);
         Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
-        //card.flip();
+        System.out.println(foundationPiles);
         if (tableaupile != null) {
             if (draggedCards.size() <= 1) {
                 handleValidMove(card, tableaupile);
@@ -118,6 +121,7 @@ public class Game extends Pane {
         }else if (foundationpile!=null) {
             if (draggedCards.size() <= 1) {
                 handleValidMove(card, foundationpile);
+                isGameWon();
                 if (!card.getContainingPile().getPileType().equals(Pile.PileType.DISCARD) && card.getContainingPile().getLastoBeforeTopCard().isFaceDown())
                     card.getContainingPile().getLastoBeforeTopCard().flip();
             }
@@ -125,11 +129,15 @@ public class Game extends Pane {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
+
     };
 
     public boolean isGameWon() {
-        //TODO win win
-        return false;
+        if ((foundationPiles.get(0).numOfCards() ==1) && (foundationPiles.get(1).numOfCards() ==1) &&
+                (foundationPiles.get(2).numOfCards() ==1) && (foundationPiles.get(3).numOfCards() ==1)) {
+            JOptionPane.showMessageDialog(null, "You won!!!!!", "Goood boooy!!", JOptionPane.PLAIN_MESSAGE);
+            return true;
+        }return false;
     }
 
     public Game() {
@@ -258,7 +266,11 @@ public class Game extends Pane {
             for (int j = 0; j <= i; j++) {
                 tableauPiles.get(i).addCard(deck.get(countCard++));
                 if (j==i) {
-                    tableauPiles.get(i).getTopCard().flip();
+                    if (tableauPiles.get(i).getTopCard().isFaceDown())
+                        tableauPiles.get(i).getTopCard().flip();
+/*                } else {
+                    if (tableauPiles.get(i).getCards().get(i).isFaceDown())
+                        tableauPiles.get(i).getCards().get(i).flip();*/
                 }
             }
         }
@@ -295,17 +307,69 @@ public class Game extends Pane {
 
         Button buttonRestartGame = new Button("RestartGame");
         buttonRestartGame.setPrefSize(100, 20);
-        buttonRestartGame.setOnAction((event) -> {
+
+        Scene primaryStage = getScene();
+        buttonRestartGame.setOnAction( __ ->
+        {
+            System.out.println( "Restarting app!" );
+            restart();
+
+
+/*            for (int i = 0; i < tableauPiles.size(); i++) {
+                for (int j = 0; j <= i; j++) {
+                    if (tableauPiles.get(i).getTopCard().isFaceDown())
+                        tableauPiles.get(i).getTopCard().flip();
+                }
+            }*/
+            dealCards();
+
+        } );
+
+
+/*        buttonRestartGame.setOnAction((event) -> {
 //            stockPile.clear();
 //            discardPile.clear();
             tableauPiles.clear();
 //            foundationPiles.clear();
             dealCards();
-        });
+        });*/
 
         hbox.getChildren().addAll(buttonNewGame, buttonRestartGame);
 
         return hbox;
+    }
+
+    private void restart () {
+        for (Pile p : tableauPiles) {
+            for (Card c : p.getCards()) {
+                getChildren().remove(c);
+            }
+            p.getCards().clear();
+        }
+
+        for (Pile p : foundationPiles) {
+            for (Card c : p.getCards()) {
+                getChildren().remove(c);
+            }
+            p.getCards().clear();
+        }
+
+        for (Card c : stockPile.getCards()) {
+            getChildren().remove(c);
+        }
+        stockPile.getCards().clear();
+
+        for (Card c : discardPile.getCards()) {
+
+            getChildren().remove(c);
+        }
+
+
+
+/*        deck.clear();
+        discardPile.getCards().clear();
+        deck = Card.createNewDeck();*/
+
     }
 
     @Override
