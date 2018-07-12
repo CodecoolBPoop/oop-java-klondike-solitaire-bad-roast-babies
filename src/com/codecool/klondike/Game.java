@@ -43,10 +43,10 @@ public class Game extends Pane {
             stockPile.numOfCards(); //Counts the cards in the discord pile during the game.
             discardPile.numOfCards(); //Counts the cards in the discord pile during the game.
         }
-        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU)
+/*        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU)
             if (card.isFaceDown() && (topCard.equals(card))) {
                 card.flip();
-            }
+            }*/
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -57,6 +57,12 @@ public class Game extends Pane {
         dragStartX = e.getSceneX();
         dragStartY = e.getSceneY();
     };
+
+/*    private ListChangeListener<Card> onMouseClickedHandler = e -> {
+        for (int i = 0; i < ; i++) {
+            if
+        }
+    };*/
 
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
@@ -98,8 +104,10 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile tableaupile = getValidIntersectingPile(card, tableauPiles);
         Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
+        //card.flip();
         if (tableaupile != null) {
             handleValidMove(card, tableaupile);
+            card.getContainingPile().getLastoBeforeTopCard().flip();
         }else if (foundationpile!=null) {
             handleValidMove(card, foundationpile);
         } else {
