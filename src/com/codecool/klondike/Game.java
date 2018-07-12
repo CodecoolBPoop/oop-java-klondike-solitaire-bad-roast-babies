@@ -91,13 +91,11 @@ public class Game extends Pane {
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
-        System.out.println(isGameWon());
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
         Pile tableaupile = getValidIntersectingPile(card, tableauPiles);
         Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
-        System.out.println(foundationPiles);
         if (tableaupile != null) {
             if (draggedCards.size() <= 1) {
                 handleValidMove(card, tableaupile);
@@ -265,9 +263,6 @@ public class Game extends Pane {
                 if (j == i) {
                     if (tableauPiles.get(i).getTopCard().isFaceDown())
                         tableauPiles.get(i).getTopCard().flip();
-/*                } else {
-                    if (tableauPiles.get(i).getCards().get(i).isFaceDown())
-                        tableauPiles.get(i).getCards().get(i).flip();*/
                 }
             }
         }
@@ -313,7 +308,7 @@ public class Game extends Pane {
         });
 
 
-        Button buttonRestartGame = new Button("RestartGame");
+        Button buttonRestartGame = new Button("Restart");
         buttonRestartGame.setPrefSize(100, 20);
         buttonRestartGame.setLayoutY(50);
 
@@ -322,14 +317,7 @@ public class Game extends Pane {
         {
             System.out.println("restarting app");
             restart();
-/*            for (int i = 0; i < tableauPiles.size(); i++) {
-                for (int j = 0; j <= i; j++) {
-                    if (tableauPiles.get(i).getTopCard().isFaceDown())
-                        tableauPiles.get(i).getTopCard().flip();
-                }
-            }*/
             dealCards();
-
         });
 
         vbox.getChildren().addAll(buttonNewGame, buttonRestartGame);
@@ -339,6 +327,8 @@ public class Game extends Pane {
     private void restart() {
         for (Pile p : tableauPiles) {
             for (Card c : p.getCards()) {
+                if (!c.isFaceDown())
+                    c.flip();
                 getChildren().remove(c);
             }
             p.getCards().clear();
@@ -352,12 +342,15 @@ public class Game extends Pane {
         }
 
         for (Card c : stockPile.getCards()) {
+            if (!c.isFaceDown())
+                c.flip();
             getChildren().remove(c);
         }
         stockPile.getCards().clear();
 
         for (Card c : discardPile.getCards()) {
-
+            if (!c.isFaceDown())
+                c.flip();
             getChildren().remove(c);
         }
 

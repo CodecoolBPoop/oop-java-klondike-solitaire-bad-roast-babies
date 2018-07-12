@@ -76,6 +76,14 @@ public class Pile extends Pane {
             return cards.get(cards.size() - 1);
     }
 
+    public Card getCard(int x) {
+        if (cards.isEmpty())
+            return null;
+        else
+            return cards.get(x);
+    }
+
+
     public Card getLastoBeforeTopCard() {
         if (cards.isEmpty())
             return null;
