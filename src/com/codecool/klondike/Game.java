@@ -33,6 +33,8 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
+        Pile activePile = card.getContainingPile();
+        Card topCard = activePile.getTopCard();
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
             card.flip();
@@ -41,12 +43,10 @@ public class Game extends Pane {
             stockPile.numOfCards(); //Counts the cards in the discord pile during the game.
             discardPile.numOfCards(); //Counts the cards in the discord pile during the game.
         }
-        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU )  {
-            //tableauPiles.get(i).getTopCard().flip();
-            if (card.isFaceDown()) {
+        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU)
+            if (card.isFaceDown() && (topCard.equals(card))) {
                 card.flip();
             }
-        }
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -61,21 +61,35 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK)
+        draggedCards.clear();
+        card.toFront();
+
+        if (activePile.getPileType() == Pile.PileType.STOCK) {
             return;
+        }
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
-        draggedCards.clear();
-        draggedCards.add(card);
+        if (activePile.getPileType() == Pile.PileType.TABLEAU) {
 
-        card.getDropShadow().setRadius(20);
-        card.getDropShadow().setOffsetX(10);
-        card.getDropShadow().setOffsetY(10);
 
-        card.toFront();
-        card.setTranslateX(offsetX);
-        card.setTranslateY(offsetY);
+            for (int i = activePile.getCards().indexOf(card); i < activePile.getCards().size(); i++) {
+                draggedCards.add(activePile.getCards().get(i));
+            }
+
+        } else {
+            draggedCards.add(card);
+        }
+
+        for (Card item : draggedCards) {
+            item.getDropShadow().setRadius(20);
+            item.getDropShadow().setOffsetX(10);
+            item.getDropShadow().setOffsetY(10);
+
+            item.setTranslateX(offsetX);
+            item.setTranslateY(offsetY);
+            item.toFront();
+        }
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
