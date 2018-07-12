@@ -19,10 +19,15 @@ public class Klondike extends Application {
         Card.loadCardImages();
         Game game = new Game();
         game.setTableBackground(new Image("/table/green.png"));
+        game.getChildren().add(game.addHBox());
 
-        primaryStage.setTitle("Klondike");
+        primaryStage.setTitle("Klondike Solitaire");
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();
     }
-//TODO valahol a code direkt hibákat generál. TAláld meg és csináld meg .
+
+    public void restart(Stage stage) {
+        start(stage);
+        }
+
 }

@@ -3,16 +3,15 @@ package com.codecool.klondike;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -61,6 +60,12 @@ public class Game extends Pane {
         dragStartY = e.getSceneY();
     };
 
+/*    private ListChangeListener<Card> onMouseClickedHandler = e -> {
+        for (int i = 0; i < ; i++) {
+            if
+        }
+    };*/
+
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
@@ -93,9 +98,8 @@ public class Game extends Pane {
             item.setTranslateY(offsetY);
             item.toFront();
         }
-
-
     };
+
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
 
@@ -109,20 +113,38 @@ public class Game extends Pane {
             handleValidMove(card, pile);
         Pile tableaupile = getValidIntersectingPile(card, tableauPiles);
         Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
+        System.out.println(foundationPiles);
         if (tableaupile != null) {
-            handleValidMove(card, tableaupile);
+            if (draggedCards.size() <= 1) {
+                handleValidMove(card, tableaupile);
+                if (!card.getContainingPile().getPileType().equals(Pile.PileType.DISCARD) && card.getContainingPile().getLastoBeforeTopCard().isFaceDown())
+                    card.getContainingPile().getLastoBeforeTopCard().flip();
+            } else if (draggedCards.size() > 1) {
+                handleValidMove(card, tableaupile);
+                if (!card.getContainingPile().getPileType().equals(Pile.PileType.DISCARD) && card.getContainingPile().getLastoBeforeTopCard().isFaceDown())
+                    card.getContainingPile().getLastoBeforeTopCard().flip();
+                    System.out.println("szivás");
+            }
         }else if (foundationpile!=null) {
-            handleValidMove(card, foundationpile);
-
+            if (draggedCards.size() <= 1) {
+                handleValidMove(card, foundationpile);
+                isGameWon();
+                if (!card.getContainingPile().getPileType().equals(Pile.PileType.DISCARD) && card.getContainingPile().getLastoBeforeTopCard().isFaceDown())
+                    card.getContainingPile().getLastoBeforeTopCard().flip();
+            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
+
     };
 
     public boolean isGameWon() {
-        //TODO win win
-        return false;
+        if ((foundationPiles.get(0).numOfCards() ==1) && (foundationPiles.get(1).numOfCards() ==1) &&
+                (foundationPiles.get(2).numOfCards() ==1) && (foundationPiles.get(3).numOfCards() ==1)) {
+            JOptionPane.showMessageDialog(null, "You won!!!!!", "Goood boooy!!", JOptionPane.PLAIN_MESSAGE);
+            return true;
+        }return false;
     }
 
     public Game() {
@@ -252,8 +274,12 @@ public class Game extends Pane {
         for (int i = 0; i < tableauPiles.size(); i++) {
             for (int j = 0; j <= i; j++) {
                 tableauPiles.get(i).addCard(deck.get(countCard++));
-                if (j == i) {
-                    tableauPiles.get(i).getTopCard().flip();
+                if (j==i) {
+                    if (tableauPiles.get(i).getTopCard().isFaceDown())
+                        tableauPiles.get(i).getTopCard().flip();
+/*                } else {
+                    if (tableauPiles.get(i).getCards().get(i).isFaceDown())
+                        tableauPiles.get(i).getCards().get(i).flip();*/
                 }
             }
         }
@@ -278,6 +304,82 @@ public class Game extends Pane {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+    }
+
+    public HBox addHBox() {
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setSpacing(10);
+        hbox.setStyle("-fx-background-color: #336699;");
+
+        Button buttonNewGame = new Button("New Game");
+        buttonNewGame.setPrefSize(100, 20);
+
+        Button buttonRestartGame = new Button("RestartGame");
+        buttonRestartGame.setPrefSize(100, 20);
+
+        Scene primaryStage = getScene();
+        buttonRestartGame.setOnAction( __ ->
+        {
+            System.out.println( "Restarting app!" );
+            restart();
+
+
+/*            for (int i = 0; i < tableauPiles.size(); i++) {
+                for (int j = 0; j <= i; j++) {
+                    if (tableauPiles.get(i).getTopCard().isFaceDown())
+                        tableauPiles.get(i).getTopCard().flip();
+                }
+            }*/
+            dealCards();
+
+        } );
+
+
+/*        buttonRestartGame.setOnAction((event) -> {
+//            stockPile.clear();
+//            discardPile.clear();
+            tableauPiles.clear();
+//            foundationPiles.clear();
+            dealCards();
+        });*/
+
+        hbox.getChildren().addAll(buttonNewGame, buttonRestartGame);
+
+        return hbox;
+    }
+
+    private void restart () {
+        for (Pile p : tableauPiles) {
+            for (Card c : p.getCards()) {
+                getChildren().remove(c);
+            }
+            p.getCards().clear();
+        }
+
+        for (Pile p : foundationPiles) {
+            for (Card c : p.getCards()) {
+                getChildren().remove(c);
+            }
+            p.getCards().clear();
+        }
+
+        for (Card c : stockPile.getCards()) {
+            getChildren().remove(c);
+        }
+        stockPile.getCards().clear();
+
+        for (Card c : discardPile.getCards()) {
+
+            getChildren().remove(c);
+        }
+
+
+
+/*        deck.clear();
+        discardPile.getCards().clear();
+        deck = Card.createNewDeck();*/
+
     }
 
     @Override
