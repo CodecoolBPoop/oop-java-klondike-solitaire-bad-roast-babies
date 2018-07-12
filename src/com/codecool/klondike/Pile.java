@@ -42,7 +42,7 @@ public class Pile extends Pane {
     public int numOfCards() {
         int numberOfCards = cards.size();
 //        String pileName = getName(); //How to print out the name of the pile?
-        System.out.println("There is " + numberOfCards + " cards in ? pile.");
+ //       System.out.println("There is " + numberOfCards + " cards in ? pile.");
         return numberOfCards;
     }
 
