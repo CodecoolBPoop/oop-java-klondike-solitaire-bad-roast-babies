@@ -43,10 +43,10 @@ public class Game extends Pane {
             stockPile.numOfCards(); //Counts the cards in the discord pile during the game.
             discardPile.numOfCards(); //Counts the cards in the discord pile during the game.
         }
-/*        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU)
+        if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU)
             if (card.isFaceDown() && (topCard.equals(card))) {
                 card.flip();
-            }*/
+            }
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -78,7 +78,6 @@ public class Game extends Pane {
 
         if (activePile.getPileType() == Pile.PileType.TABLEAU) {
 
-
             for (int i = activePile.getCards().indexOf(card); i < activePile.getCards().size(); i++) {
                 draggedCards.add(activePile.getCards().get(i));
             }
@@ -106,10 +105,22 @@ public class Game extends Pane {
         Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
         //card.flip();
         if (tableaupile != null) {
-            handleValidMove(card, tableaupile);
-            card.getContainingPile().getLastoBeforeTopCard().flip();
+            if (draggedCards.size() <= 1) {
+                handleValidMove(card, tableaupile);
+                if (!card.getContainingPile().getPileType().equals(Pile.PileType.DISCARD) && card.getContainingPile().getLastoBeforeTopCard().isFaceDown())
+                    card.getContainingPile().getLastoBeforeTopCard().flip();
+            } else if (draggedCards.size() > 1) {
+                handleValidMove(card, tableaupile);
+                if (!card.getContainingPile().getPileType().equals(Pile.PileType.DISCARD) && card.getContainingPile().getLastoBeforeTopCard().isFaceDown())
+                    card.getContainingPile().getLastoBeforeTopCard().flip();
+                    System.out.println("szivás");
+            }
         }else if (foundationpile!=null) {
-            handleValidMove(card, foundationpile);
+            if (draggedCards.size() <= 1) {
+                handleValidMove(card, foundationpile);
+                if (!card.getContainingPile().getPileType().equals(Pile.PileType.DISCARD) && card.getContainingPile().getLastoBeforeTopCard().isFaceDown())
+                    card.getContainingPile().getLastoBeforeTopCard().flip();
+            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
