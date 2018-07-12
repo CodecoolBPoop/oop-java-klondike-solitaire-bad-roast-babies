@@ -293,11 +293,13 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
-    public HBox addHBox() {
-        HBox hbox = new HBox();
-        hbox.setPadding(new Insets(15, 12, 15, 12));
-        hbox.setSpacing(10);
-        hbox.setStyle("-fx-background-color: #336699;");
+    public VBox addVBox() {
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(15, 12, 115, 12));
+        vbox.setLayoutX(458);
+        vbox.setLayoutY(70);
+        vbox.setSpacing(10);
+    //    vbox.setStyle("-fx-background-color: #209926;");
 
         Button buttonNewGame = new Button("New Game");
         buttonNewGame.setPrefSize(100, 20);
@@ -313,6 +315,7 @@ public class Game extends Pane {
 
         Button buttonRestartGame = new Button("RestartGame");
         buttonRestartGame.setPrefSize(100, 20);
+        buttonRestartGame.setLayoutY(50);
 
         Scene primaryStage = getScene();
         buttonRestartGame.setOnAction(__ ->
@@ -329,8 +332,8 @@ public class Game extends Pane {
 
         });
 
-        hbox.getChildren().addAll(buttonNewGame, buttonRestartGame);
-        return hbox;
+        vbox.getChildren().addAll(buttonNewGame, buttonRestartGame);
+        return vbox;
     }
 
     private void restart() {
