@@ -13,6 +13,8 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -102,19 +104,9 @@ public class Game extends Pane {
     public boolean isGameWon() {
         if ((foundationPiles.get(0).numOfCards() ==1) && (foundationPiles.get(1).numOfCards() ==1) &&
                 (foundationPiles.get(2).numOfCards() ==1) && (foundationPiles.get(3).numOfCards() ==1)) {
-            System.out.println("you won");
+            JOptionPane.showMessageDialog(null, "You won!!!!!", "Goood boooy!!", JOptionPane.PLAIN_MESSAGE);
             return true;
         }return false;
-//        for (int i = 0; i < foundationPiles.size(); i++) {
-//            if (foundationPiles.get(i).numOfCards() == 1) {
-//                System.out.println("not yet");
-//            }else {
-//                return false;
-//            }
-//        }
-//        System.out.println("you win");
-//        return true;
-
     }
 
     public Game() {
