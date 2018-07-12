@@ -87,10 +87,13 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile tableaupile = getValidIntersectingPile(card, tableauPiles);
         Pile foundationpile = getValidIntersectingPile(card, foundationPiles);
+        System.out.println(foundationPiles);
         if (tableaupile != null) {
             handleValidMove(card, tableaupile);
         }else if (foundationpile!=null) {
             handleValidMove(card, foundationpile);
+            foundationpile.addCard(card);
+            isGameWon();
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -98,7 +101,13 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon() {
-        //TODO win win
+        for (int i = 0; i<foundationPiles.size(); i++) {
+            if (i == 4) {
+                System.out.println("you won");
+                return true;
+            }
+
+        }
         return false;
     }
 
