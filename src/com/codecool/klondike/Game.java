@@ -56,11 +56,6 @@ public class Game extends Pane {
         dragStartY = e.getSceneY();
     };
 
-/*    private ListChangeListener<Card> onMouseClickedHandler = e -> {
-        for (int i = 0; i < ; i++) {
-            if
-        }
-    };*/
 
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
@@ -130,17 +125,21 @@ public class Game extends Pane {
 
     public Game() {
         deck = Card.createNewDeck();
-        //System.out.println("deck" + deck.toString());
         initPiles();
         shuffleCards();
         dealCards();
     }
 
     public boolean isGameWon() {
-        if ((foundationPiles.get(0).numOfCards() == 1) && (foundationPiles.get(1).numOfCards() == 1) &&
-                (foundationPiles.get(2).numOfCards() == 1) && (foundationPiles.get(3).numOfCards() == 1)) {
+        if ((foundationPiles.get(0).numOfCards() == 1) && (foundationPiles.get(1).numOfCards() == 0) &&
+                (foundationPiles.get(2).numOfCards() == 0) && (foundationPiles.get(3).numOfCards() == 0)) {
             JOptionPane.showMessageDialog(null, "You won!!!!!", "Goood boooy!!", JOptionPane.PLAIN_MESSAGE);
-            return true;
+            restart();
+            deck = Card.createNewDeck();
+            shuffleCards();
+            dealCards();
+
+            //return true;
         }
         return false;
     }
@@ -280,7 +279,7 @@ public class Game extends Pane {
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
-        stockPile.numOfCards(); //Counts the cards in the stock pile at the start.
+        //stockPile.numOfCards();
 
     }
 
@@ -302,6 +301,15 @@ public class Game extends Pane {
 
         Button buttonNewGame = new Button("New Game");
         buttonNewGame.setPrefSize(100, 20);
+        buttonNewGame.setOnAction(__ ->
+        {
+            System.out.println("started a new game");
+            restart();
+            deck = Card.createNewDeck();
+            shuffleCards();
+            dealCards();
+        });
+
 
         Button buttonRestartGame = new Button("RestartGame");
         buttonRestartGame.setPrefSize(100, 20);
@@ -309,10 +317,8 @@ public class Game extends Pane {
         Scene primaryStage = getScene();
         buttonRestartGame.setOnAction(__ ->
         {
-            System.out.println("Restarting app!");
+            System.out.println("restarting app");
             restart();
-
-
 /*            for (int i = 0; i < tableauPiles.size(); i++) {
                 for (int j = 0; j <= i; j++) {
                     if (tableauPiles.get(i).getTopCard().isFaceDown())
@@ -323,17 +329,7 @@ public class Game extends Pane {
 
         });
 
-
-/*        buttonRestartGame.setOnAction((event) -> {
-//            stockPile.clear();
-//            discardPile.clear();
-            tableauPiles.clear();
-//            foundationPiles.clear();
-            dealCards();
-        });*/
-
         hbox.getChildren().addAll(buttonNewGame, buttonRestartGame);
-
         return hbox;
     }
 
@@ -361,12 +357,6 @@ public class Game extends Pane {
 
             getChildren().remove(c);
         }
-
-
-
-/*        deck.clear();
-        discardPile.getCards().clear();
-        deck = Card.createNewDeck();*/
 
     }
 
