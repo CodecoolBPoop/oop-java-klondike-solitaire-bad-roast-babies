@@ -1,8 +1,14 @@
 package com.codecool.klondike;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class Klondike extends Application {
@@ -19,11 +25,12 @@ public class Klondike extends Application {
         Card.loadCardImages();
         Game game = new Game();
         game.setTableBackground(new Image("/table/green.png"));
-        game.getChildren().add(game.addHBox());
+        game.getChildren().add(game.addVBox());
+//        BorderPane border = new BorderPane();
+//        border.setBottom(game.addHBox());
 
         primaryStage.setTitle("Klondike Solitaire");
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();
     }
-//TODO valahol a code direkt hibákat generál. TAláld meg és csináld meg .
 }

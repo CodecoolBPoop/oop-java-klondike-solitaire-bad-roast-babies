@@ -297,11 +297,11 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
-    public HBox addHBox() {
-        HBox hbox = new HBox();
-        hbox.setPadding(new Insets(15, 12, 15, 12));
-        hbox.setSpacing(10);
-        hbox.setStyle("-fx-background-color: #336699;");
+    public VBox addVBox() {
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(15, 12, 15, 12));
+        vbox.setSpacing(10);
+        vbox.setStyle("-fx-background-color: #336699;");
 
         Button newGameButton = new Button("New Game");
         newGameButton.setPrefSize(100, 20);
@@ -318,9 +318,9 @@ public class Game extends Pane {
             dealCards();
         });
 
-        hbox.getChildren().addAll(newGameButton, restartGameButton);
+        vbox.getChildren().addAll(newGameButton, restartGameButton);
 
-        return hbox;
+        return vbox;
     }
 
     @Override
